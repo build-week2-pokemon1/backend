@@ -2,10 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Pokemon = require('./pokes');
+const User = require('./users');
 const server = express();
 require('dotenv').config();
 
-// const User = require('./UserSchema');
 // const jwt = require('jsonwebtoken');
 
 server.use(express.json());
@@ -13,21 +13,46 @@ server.use(express.json());
 const uri = process.env.MONGO_URI;
 mongoose.connect(uri);
 
-server.listen(5000, () => {
-  console.log('server listening on port 5000');
+server.listen(8000, () => {
+  console.log('server listening on port 8000');
 })
-
-//routes:
-  //register
-  //login
-  //logout
-  //pokemon- get ALL pokemon
-  //pokemon/{:name}- get 1 by name
 
 server.get('/', (req, res) => {
   res.status(200).json({msg: 'hello world'});
 })
 
+//register
+server.post('/api/register', (req, res) => {
+  const userData = req.body;
+  const newUser = new User(userData);
+  newUser.save()
+    .then(user => {
+      res.status(200).json(user)
+    })
+    .catch(err => res.sendStatus(500))
+})
+
+//login
+server.put('/api/login', (req, res) => {
+  const { username, password} = req.body;
+  User.findOne({username})
+    .then( user => {
+      user.comparePasswords(password)
+        .then(isMatch => {
+          if(isMatch) {
+            res.status(200).json({msg: 'login successful'})
+          } else {
+            res.status(401).json({msg: 'login failed'})
+          }
+        })
+    })
+    .catch(err => res.status(500).json({msg: 'cannot get user'}))
+})
+
+//logout
+
+
+//pokemon- get ALL pokemon
 server.get('/pokemon', (req, res) => {
   Pokemon.find({}, (err, pokes) => {
     if(err) {
@@ -36,23 +61,14 @@ server.get('/pokemon', (req, res) => {
     }
     res.json(pokes);
   })
-
-  //returns array
-  // Pokemon.find()
-  //   .then(pokes => {
-  //     res.status(200).json(pokes);
-  //     // console.log(pokemon.character[0]);
-  //   })
-  //   .catch( err => {
-  //     res.status(500).json(err);
-  //   })
 })
 
-server.get('/pokemon/:id', (req, res) => {
-  const id = req.params.id;
-  Pokemon.findById(id, (err, pokemon) => {
+//pokemon/{:name}- get 1 by name
+server.get('/pokemon/:name', (req, res) => {
+  const name = req.params.name;
+  Pokemon.findById(name, (err, pokemon) => {
     if(err) res.sendStatus(500);
-    if(!id) return res.status(500).json({msg: 'ID not found'});
+    if(!name) return res.status(500).json({msg: 'Pokemon not found'});
     res.json(pokemon);
     console.log(pokemon);
   })
