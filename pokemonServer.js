@@ -33,7 +33,7 @@ server.post('/api/register', (req, res) => {
   newUser.save()
     .then(user => {
       const token = makeToken(user)
-      res.status(200).json({user})
+      res.status(200).json({user, token})
     })
     .catch(err => res.sendStatus(500))
 })
