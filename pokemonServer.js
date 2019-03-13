@@ -15,10 +15,14 @@ const PORT = process.env.PORT || 8000;
 server.use(express.json());
 
 const uri = process.env.MONGO_URI;
-mongoose.connect(uri, {useNewUrlParser: true });
+mongoose.connect(uri, { useNewUrlParser: true }, { useMongoClient: true });
 
 server.listen(PORT, () => {
   console.log('server listening');
+})
+
+server.get('/', (req, res) => {
+  return res.status(200).json({msg: "hello!"});
 })
 
 //register
