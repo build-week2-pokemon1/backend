@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const Pokemon = require('./pokes');
+const Monster = require('./monsters');
 const User = require('./users');
 const server = express();
 require('dotenv').config();
@@ -15,10 +15,6 @@ mongoose.connect(uri);
 
 server.listen(8000, () => {
   console.log('server listening on port 8000');
-})
-
-server.get('/', (req, res) => {
-  res.status(200).json({msg: 'hello world'});
 })
 
 //register
@@ -49,39 +45,25 @@ server.put('/api/login', (req, res) => {
     .catch(err => res.status(500).json({msg: 'cannot get user'}))
 })
 
-//logout
-
+//logout- handled on frontend
 
 //pokemon- get ALL pokemon
 server.get('/pokemon', (req, res) => {
-  Pokemon.find({}, (err, pokes) => {
+  Monster.find({}, (err, monsters) => {
     if(err) {
       res.status(500).json(err);
       return;
     }
-    res.json(pokes);
+    res.json(monsters);
   })
 })
 
-//pokemon/{:name}- get 1 by name
-server.get('/pokemon/:name', (req, res) => {
-  const name = req.params.name;
-  Pokemon.findById(name, (err, pokemon) => {
+//pokemon/{:id}- get 1 by id
+server.get('/pokemon/:id', (req, res) => {
+  const id = req.params.id;
+  Monster.findById(id, (err, monster) => {
     if(err) res.sendStatus(500);
-    if(!name) return res.status(500).json({msg: 'Pokemon not found'});
-    res.json(pokemon);
-    console.log(pokemon);
-  })
-})
-
-server.post('/pokemon', (req, res) => {
-  const newPokemon = new Pokemon(req.body);
-  newPokemon.save((err, newPokemon) => {
-    if(err) {
-      res.status(500).json({msg: "couldn't save pokemon"});
-      return;
-    }
-    res.status(200).json(newPokemon);
-    console.log(newPokemon);
+    if(!id) return res.status(500).json({msg: 'Pokemon not found'});
+    res.json(monster);
   })
 })
