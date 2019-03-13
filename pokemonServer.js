@@ -6,6 +6,8 @@ const User = require('./users');
 const server = express();
 require('dotenv').config();
 
+const PORT = process.env.PORT || 8000;
+
 // const jwt = require('jsonwebtoken');
 
 server.use(express.json());
@@ -13,8 +15,8 @@ server.use(express.json());
 const uri = process.env.MONGO_URI;
 mongoose.connect(uri);
 
-server.listen(8000, () => {
-  console.log('server listening on port 8000');
+server.listen(PORT, () => {
+  console.log('server listening');
 })
 
 //register
