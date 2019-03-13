@@ -29,6 +29,7 @@ server.post('/api/register', (req, res) => {
 })
 
 //login
+//add jwt
 server.put('/api/login', (req, res) => {
   const { username, password} = req.body;
   User.findOne({username})
