@@ -25,7 +25,7 @@ const verifyToken = (req, res, next) => {
       res.status(401).json({msg: 'token cannot be verified'});
       return;
     }
-    // req.jwtpayload = payload;
+    req.jwtpayload = payload;
     next();
   })
 }
