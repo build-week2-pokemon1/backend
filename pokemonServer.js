@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Monster = require('./monsters');
 const User = require('./users');
+const path = require('path');
 const server = express();
-require('dotenv').config();
+
+require('dotenv').config({path: '.env'});
 
 const PORT = process.env.PORT || 8000;
 
@@ -13,7 +15,7 @@ const PORT = process.env.PORT || 8000;
 server.use(express.json());
 
 const uri = process.env.MONGO_URI;
-mongoose.connect(uri);
+mongoose.connect(uri, {useNewUrlParser: true });
 
 server.listen(PORT, () => {
   console.log('server listening');
