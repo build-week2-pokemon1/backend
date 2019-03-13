@@ -13,6 +13,7 @@ const PokeSchema = new mongoose.Schema({
   Speed: Number,
   Generation: Number,
   Legendary: Boolean,
+  Img: String,
 })
 
 module.exports = mongoose.model('Monster', PokeSchema);

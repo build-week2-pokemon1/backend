@@ -1,10 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const Monster = require('./monsters');
 const User = require('./users');
 const path = require('path');
 const server = express();
+const cors = require('cors');
 
 require('dotenv').config({path: '.env'});
 
@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 8000;
 // const jwt = require('jsonwebtoken');
 
 server.use(express.json());
+server.use(cors());
 
 const uri = process.env.MONGO_URI;
 mongoose.connect(uri, { useNewUrlParser: true }, { useMongoClient: true });
@@ -57,6 +58,7 @@ server.put('/api/login', (req, res) => {
 //logout- handled on frontend
 
 //pokemon- get ALL pokemon
+// make: '/api/pokemon' 
 server.get('/pokemon', (req, res) => {
   Monster.find({}, (err, monsters) => {
     if(err) {
@@ -68,6 +70,8 @@ server.get('/pokemon', (req, res) => {
 })
 
 //pokemon/{:id}- get 1 by id
+// make: '/api/pokemon' 
+
 server.get('/pokemon/:id', (req, res) => {
   const id = req.params.id;
   Monster.findById(id, (err, monster) => {
