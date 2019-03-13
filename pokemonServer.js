@@ -58,8 +58,7 @@ server.put('/api/login', (req, res) => {
 //logout- handled on frontend
 
 //pokemon- get ALL pokemon
-// make: '/api/pokemon' 
-server.get('/pokemon', (req, res) => {
+server.get('/api/pokemon', (req, res) => {
   Monster.find({}, (err, monsters) => {
     if(err) {
       res.status(500).json(err);
@@ -70,9 +69,7 @@ server.get('/pokemon', (req, res) => {
 })
 
 //pokemon/{:id}- get 1 by id
-// make: '/api/pokemon' 
-
-server.get('/pokemon/:id', (req, res) => {
+server.get('/api/pokemon/:id', (req, res) => {
   const id = req.params.id;
   Monster.findById(id, (err, monster) => {
     if(err) res.sendStatus(500);
